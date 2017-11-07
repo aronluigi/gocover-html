@@ -31,19 +31,19 @@ type templateFile struct {
 
 const (
 	// HTMLTemplateFile - raw html template
-	HTMLTemplateFile = "./res/index.html"
+	HTMLTemplateFile = "/res/index.html"
 	// PrismCSS file
-	PrismCSS = "./res/prism.css"
+	PrismCSS = "/res/prism.css"
 	// PrismJS file
-	PrismJS = "./res/prism.js"
+	PrismJS = "/res/prism.js"
 	// BootstrapCSS file
-	BootstrapCSS = "./res/bootstrap.min.css"
+	BootstrapCSS = "/res/bootstrap.min.css"
 	// BootstrapJS file
-	BootstrapJS = "./res/bootstrap.min.js"
+	BootstrapJS = "/res/bootstrap.min.js"
 	// JQuery file
-	JQuery = "./res/jquery-3.2.1.slim.min.js"
+	JQuery = "/res/jquery-3.2.1.slim.min.js"
 	// Popper file
-	Popper = "./res/popper.min.js"
+	Popper = "/res/popper.min.js"
 )
 
 func removeArrayDuplicates(e []string) []string {
@@ -62,34 +62,39 @@ func removeArrayDuplicates(e []string) []string {
 }
 
 func getTemplate(buf *os.File, data *templateData) error {
-	it := template.Must(template.ParseFiles(HTMLTemplateFile))
-
-	prismCSS, err := ioutil.ReadFile(PrismCSS)
+	dir, err := os.Getwd()
 	if err != nil {
 		return err
 	}
 
-	prismJS, err := ioutil.ReadFile(PrismJS)
+	it := template.Must(template.ParseFiles(dir + HTMLTemplateFile))
+
+	prismCSS, err := ioutil.ReadFile(dir + PrismCSS)
 	if err != nil {
 		return err
 	}
 
-	bsCSS, err := ioutil.ReadFile(BootstrapCSS)
+	prismJS, err := ioutil.ReadFile(dir + PrismJS)
 	if err != nil {
 		return err
 	}
 
-	jq, err := ioutil.ReadFile(JQuery)
+	bsCSS, err := ioutil.ReadFile(dir + BootstrapCSS)
 	if err != nil {
 		return err
 	}
 
-	bsJS, err := ioutil.ReadFile(BootstrapJS)
+	jq, err := ioutil.ReadFile(dir + JQuery)
 	if err != nil {
 		return err
 	}
 
-	popper, err := ioutil.ReadFile(Popper)
+	bsJS, err := ioutil.ReadFile(dir + BootstrapJS)
+	if err != nil {
+		return err
+	}
+
+	popper, err := ioutil.ReadFile(dir + Popper)
 	if err != nil {
 		return err
 	}
