@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Hello, world!</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <style type="text/css">
+         {{ .bootstrapCSS }}
+         {{ .prismCSS }}
+         body {
+             padding-top: 5em;
+         }
+         .line-highlight {
+             background: hsla(0, 100%, 50%,.35);
+	           background: linear-gradient(to right, hsla(0, 100%, 50%,.35) 70%, hsla(24, 20%, 50%,0));
+         }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-dark bg-dark fixed-top">
+            <span class="navbar-brand mb-0 h1">Code coverage report</span>
+            <span class="navbar-text text-info">
+                Total coverage: <b>{{ printf "%.2f" .totalCov }}%</b>
+            </span>
+        </nav>
+        <main role="main">
+            <div class="container">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">
+                                <b>Report Total</b>
+                            </th>
+                            <td style="min-width: 200px">
+                                <div class="progress">
+                                    <div
+                                        class="progress-bar {{ if lt .totalCov 100.00 }} bg-warning {{ else }} bg-success {{ end }}"
+                                        role="progressbar"
+                                        style="width: {{ printf "%.2f" .totalCov }}%"
+                                        aria-valuenow="{{ printf "%.2f" .totalCov }}"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100">{{ printf "%.2f" .totalCov }}%</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="container">
+                <div class="alert alert-info" role="alert">
+                    Files Overview
+                </div>
+                <table class="table">
+                    <tbody>
+                        {{ range $k, $v := .data.Files }}
+                        <tr>
+                            <th scope="row" id="file-{{ $v.ID }}" data-offset="60">
+                                <a href="#sec-{{ $v.ID }}">{{ $v.Name }}</a>
+                            </th>
+                            <td style="min-width: 200px">
+                                <div class="progress">
+                                    <div
+                                        class="progress-bar {{ if lt $v.Coverage 100.00 }} bg-warning {{ else }} bg-success {{ end }}"
+                                        role="progressbar"
+                                        style="width: {{ printf "%.2f" $v.Coverage }}%"
+                                        aria-valuenow="{{ printf "%.2f" $v.Coverage }}"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100">{{ printf "%.2f" $v.Coverage }}%</div>
+                                </div>
+                            </td>
+                        </tr>
+                        {{ end }}
+                    </tbody>
+                </table>
+                {{ range $k, $v := .data.Files }}
+                <div class="row pt-5" id="sec-{{ $v.ID }}">
+                    <div class="col pt-5">
+                        <div class="row">
+                            <div class="col-10">{{ $v.Name }}</div>
+                            <div class="col-2">
+                                <a href="#file-{{ $v.ID }}"
+                                   class="float-right btn btn-outline-info btn-sm">Back</a>
+                            </div>
+                        </div>
+                        {{ $v.Body }}
+                    </div>
+                </div>
+                {{ end }}
+            </div>
+        </main>
+        <script type="text/javascript">
+         {{ .jq }}
+         {{ .popper }}
+         {{ .bootstrapJS }}
+         {{ .prismJS }}
+        </script>
+    </body>
+</html>
